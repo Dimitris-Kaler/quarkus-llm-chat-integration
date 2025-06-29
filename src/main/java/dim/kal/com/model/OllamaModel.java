@@ -3,7 +3,7 @@ package dim.kal.com.model;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-
+//TODO:DELETE THIS IS UNACCESSARY
 public enum OllamaModel {
     DEEPSEEK_LLM("deepseek-llm"),
     MISTRAL("mistral"),

@@ -3,12 +3,18 @@ package dim.kal.com.validators;
 import dim.kal.com.model.ErrorMessage;
 import dim.kal.com.model.LlmRuntimeException;
 import dim.kal.com.model.OllamaModel;
+import dim.kal.com.service.OllamaService;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import jakarta.ws.rs.core.Response;
+
+import java.io.IOException;
 
 @ApplicationScoped
 public class ValidatorUtils implements IValidatorUtils {
 
+    @Inject
+    OllamaService ollamaService;
 
     @Override
     public void validateMessage(String message) {
@@ -23,16 +29,17 @@ public class ValidatorUtils implements IValidatorUtils {
         if (modelName == null || modelName.trim().isEmpty()) {
             return;
         }
-        if(!OllamaModel.isValidModel(modelName)){
-            throw new LlmRuntimeException(
-                    String.format(
-                            "Unsupported model: '%s'. Available models: %s",
-                            modelName,
-                            OllamaModel.getSupportedModels()
-                    ),Response.Status.BAD_REQUEST
-            );
-        }
-        }
-
+//        try{
+//        if (!ollamaService.isModelAvaliable(modelName)) {
+//            throw new LlmRuntimeException(
+//                    String.format("Model '%s' not available. Use /api/models to list installed models", modelName),
+//                    Response.Status.BAD_REQUEST
+//            );
+//        }}catch(IOException e){
+//            throw new LlmRuntimeException(
+//                    "Failed to verify model availability. Please try again later.",
+//                    Response.Status.INTERNAL_SERVER_ERROR
+//            );
+//        }
     }
-
+}
