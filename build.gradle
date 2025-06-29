@@ -18,6 +18,12 @@ dependencies {
     implementation 'io.quarkus:quarkus-resteasy'
     testImplementation 'io.quarkus:quarkus-junit5'
     testImplementation 'io.rest-assured:rest-assured'
+    implementation 'org.jboss.resteasy:resteasy-client'
+
+//        // Προσθήκη REST Client
+//        implementation 'io.quarkus:quarkus-rest-client' // Βασικό για Quarkus REST Client
+//        implementation 'io.quarkus:quarkus-rest-client-jackson' // Για JSON handling
+
 }
 
 group 'dim.kal.com'
