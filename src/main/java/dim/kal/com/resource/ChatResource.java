@@ -1,6 +1,6 @@
 package dim.kal.com.resource;
 
-import dim.kal.com.model.ErrorMessage;
+import dim.kal.com.model.LlmRuntimeException;
 import dim.kal.com.model.ResponseMessage;
 import dim.kal.com.service.ChatService;
 import jakarta.inject.Inject;
@@ -11,7 +11,6 @@ import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
-import java.util.Map;
 
 @Path("/chat")
 public class ChatResource {
@@ -20,18 +19,15 @@ public class ChatResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response chat(@QueryParam("message") String message) {
-        if (message == null || message.isEmpty()) {
-            return Response.status(Response.Status.BAD_REQUEST).entity(new ErrorMessage("The message is missing")).build();
+    public Response chat(
+            @QueryParam("message") String message,
+            @QueryParam("model") String model) {
 
-        }
         try {
-            String reply = chatService.chat(message);
+            String reply = chatService.chat(message,model);
             return Response.ok(new ResponseMessage(reply)).build();
         }catch(Exception e){
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity(new ErrorMessage("Internal error: " + e.getMessage()))
-                    .build();
+            throw new LlmRuntimeException(e.getMessage(),Response.Status.INTERNAL_SERVER_ERROR);
         }
     }
 }

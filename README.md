@@ -34,6 +34,12 @@ This runs Ollama and exposes port 11434 on your machine, which your app will con
 - Pull the deepseek-llm model to Ollama:
 ```bash
    docker exec ollama ollama pull deepseek-llm
+   
+   docker exec ollama ollama pull mixtral
+   
+   docker exec ollama ollama pull mistral
+   
+   
 ```
 
 You need this so Ollama can serve that model for your requests.
