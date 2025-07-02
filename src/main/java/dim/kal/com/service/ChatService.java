@@ -14,12 +14,27 @@ public class ChatService {
     LlmClient llmClient;
 
     @Inject
+    ConversationService conversationService;
+
+    @Inject
     IValidatorUtils validatorUtils;
 
-    public String chat(String message,String modelName) {
+    public String chat(String message,String modelName,String sessionId) {
         validatorUtils.validateMessage(message);
         validatorUtils.validateModelName(modelName);
-        return llmClient.chat(message,modelName);
+        conversationService.addMessage(sessionId, message, true);
+
+        // Δημιουργία πλήρους prompt με ιστορικό
+        String history = conversationService.getHistory(sessionId);
+        String fullPrompt = history + "\nAI:";
+
+        // Κλήση AI
+        String response = llmClient.chat(fullPrompt, modelName);
+
+        // Προσθήκη απάντησης AI στο ιστορικό
+        conversationService.addMessage(sessionId, response, false);
+
+        return response;
 
     }
 }

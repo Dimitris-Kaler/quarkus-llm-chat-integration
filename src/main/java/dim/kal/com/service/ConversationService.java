@@ -2,6 +2,8 @@ package dim.kal.com.service;
 
 
 import dim.kal.com.model.ChatMessage;
+import jakarta.enterprise.context.ApplicationScoped;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +11,14 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
-public class ConversationServices {
+@ApplicationScoped
+public class ConversationService {
+    @ConfigProperty(name = "conversation.max-messages", defaultValue = "20")
+    int maxMessages;
+
+    @ConfigProperty(name = "conversation.timeout-minutes", defaultValue = "30")
+    int timeoutMinutes;
+
     private final Map<String, List<ChatMessage>> conversations = new ConcurrentHashMap<>();
 
     public void addMessage(String sessionId, String message, boolean isUser) {
