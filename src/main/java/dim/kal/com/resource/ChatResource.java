@@ -1,6 +1,6 @@
 package dim.kal.com.resource;
 
-import dim.kal.com.model.LlmRuntimeException;
+import dim.kal.com.exception.LlmRuntimeException;
 import dim.kal.com.model.ResponseMessage;
 import dim.kal.com.service.ChatService;
 import dim.kal.com.service.ConversationService;

@@ -26,6 +26,8 @@ If you want to learn more about Quarkus, please visit its website: <https://quar
    - Start the Ollama server container:
 ```bash 
    docker run -d -p 11434:11434 --name ollama ollama/ollama
+   
+    docker run -d --name qdrant -p 6333:6333 -p 6334:6334 -v qdrant_data:/qdrant/storage qdrant/qdrant
  ```
 This runs Ollama and exposes port 11434 on your machine, which your app will connect to.
 

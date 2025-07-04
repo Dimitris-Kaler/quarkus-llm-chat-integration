@@ -1,14 +1,10 @@
 package dim.kal.com.validators;
 
-import dim.kal.com.model.ErrorMessage;
-import dim.kal.com.model.LlmRuntimeException;
-import dim.kal.com.model.OllamaModel;
+import dim.kal.com.exception.LlmRuntimeException;
 import dim.kal.com.service.OllamaService;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.core.Response;
-
-import java.io.IOException;
 
 @ApplicationScoped
 public class ValidatorUtils implements IValidatorUtils {

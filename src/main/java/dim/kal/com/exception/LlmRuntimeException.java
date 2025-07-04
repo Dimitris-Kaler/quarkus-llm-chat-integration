@@ -1,4 +1,4 @@
-package dim.kal.com.model;
+package dim.kal.com.exception;
 
 import jakarta.ws.rs.core.Response;
 

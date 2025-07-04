@@ -1,7 +1,7 @@
 package dim.kal.com.exceptionMapper;
 
 import dim.kal.com.model.ErrorMessage;
-import dim.kal.com.model.LlmRuntimeException;
+import dim.kal.com.exception.LlmRuntimeException;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.ExceptionMapper;
 import jakarta.ws.rs.ext.Provider;

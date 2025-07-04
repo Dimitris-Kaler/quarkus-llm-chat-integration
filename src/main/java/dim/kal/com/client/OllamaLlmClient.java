@@ -2,9 +2,8 @@ package dim.kal.com.client;
 
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.model.ollama.OllamaChatModel;
-import dim.kal.com.model.LlmRuntimeException;
+import dim.kal.com.exception.LlmRuntimeException;
 import dim.kal.com.service.OllamaService;
-import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;

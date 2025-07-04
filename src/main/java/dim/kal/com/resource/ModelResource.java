@@ -1,7 +1,7 @@
 package dim.kal.com.resource;
 
 import dim.kal.com.service.OllamaService;
-import dim.kal.com.model.LlmRuntimeException;
+import dim.kal.com.exception.LlmRuntimeException;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;

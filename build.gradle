@@ -19,6 +19,11 @@ dependencies {
     testImplementation 'io.quarkus:quarkus-junit5'
     testImplementation 'io.rest-assured:rest-assured'
     implementation 'org.jboss.resteasy:resteasy-client'
+    // For PDF processing
+    implementation 'org.apache.pdfbox:pdfbox:3.0.0'
+
+    // For embeddings
+    implementation 'dev.langchain4j:langchain4j-embeddings:0.27.1'
 
 //        // Προσθήκη REST Client
 //        implementation 'io.quarkus:quarkus-rest-client' // Βασικό για Quarkus REST Client
