@@ -1,7 +1,8 @@
-package dim.kal.com.service;
+package dim.kal.com.service.vector;
 
 
 import dev.langchain4j.data.embedding.Embedding;
+import dim.kal.com.service.OllamaService;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import org.eclipse.microprofile.config.inject.ConfigProperty;

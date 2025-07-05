@@ -2,8 +2,8 @@ package dim.kal.com.resource;
 
 import dim.kal.com.exception.LlmRuntimeException;
 import dim.kal.com.model.ResponseMessage;
-import dim.kal.com.service.ChatService;
-import dim.kal.com.service.ConversationService;
+import dim.kal.com.service.chat.ChatService;
+import dim.kal.com.service.chat.ConversationService;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.CookieParam;
 import jakarta.ws.rs.GET;

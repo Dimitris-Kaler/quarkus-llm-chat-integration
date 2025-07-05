@@ -1,8 +1,12 @@
 package dim.kal.com.service;
 
-import dev.langchain4j.data.document.DocumentLoader;
 import dim.kal.com.exception.LlmRuntimeException;
 import dim.kal.com.model.Document;
+import dim.kal.com.service.ingestion.DocumentType;
+import dim.kal.com.service.ingestion.loader.IDocumentLoader;
+import dim.kal.com.service.ingestion.ITextSplitterService;
+import dim.kal.com.service.vector.EmbeddingService;
+import dim.kal.com.service.vector.IVectorService;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Instance;
@@ -27,7 +31,7 @@ import java.util.stream.Collectors;
 public class RagService {
 
     @Inject
-    Instance<IDocumentLoaderService> loaders; // Αντικατάσταση του documentLoader
+    Instance<IDocumentLoader> loaders;
 //    @Inject
 //    IDocumentLoaderService documentLoader;
 
@@ -85,7 +89,7 @@ public class RagService {
             // Βεβαιώσου ότι το collection υπάρχει πριν το ingest
             ensureCollectionExists(collectionName);
 
-            IDocumentLoaderService documentLoader= loaders.stream()
+            IDocumentLoader documentLoader= loaders.stream()
                     .filter(l -> l.supports(type))
                     .findFirst()
                             .orElseThrow(()->new LlmRuntimeException("No loader for type: " + type, Response.Status.INTERNAL_SERVER_ERROR));

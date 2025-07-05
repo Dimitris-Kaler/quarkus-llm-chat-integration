@@ -1,9 +1,8 @@
-package dim.kal.com.service;
+package dim.kal.com.service.chat;
 
-import dev.langchain4j.model.chat.ChatLanguageModel;
 import dim.kal.com.client.LlmClient;
+import dim.kal.com.service.RagService;
 import dim.kal.com.validators.IValidatorUtils;
-import dim.kal.com.validators.ValidatorUtils;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import org.eclipse.microprofile.config.inject.ConfigProperty;

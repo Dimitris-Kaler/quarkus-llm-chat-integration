@@ -1,7 +1,8 @@
-package dim.kal.com.service;
+package dim.kal.com.service.ingestion.loader;
 
 import dim.kal.com.exception.DataLoadingException;
 import dim.kal.com.model.Document;
+import dim.kal.com.service.ingestion.DocumentType;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.ws.rs.core.Response;
 import org.apache.pdfbox.Loader;
@@ -16,7 +17,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @ApplicationScoped
-public class PdfDocumentLoaderService implements IDocumentLoaderService {
+public class PdfDocumentLoader implements IDocumentLoader {
 //    @Override
 //    public List<Document> load(String filePath) {
 //        System.out.println("Current working directory: " + System.getProperty("user.dir"));

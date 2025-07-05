@@ -1,4 +1,4 @@
-package dim.kal.com.service;
+package dim.kal.com.service.ingestion;
 
 public enum DocumentType {
     PDF,

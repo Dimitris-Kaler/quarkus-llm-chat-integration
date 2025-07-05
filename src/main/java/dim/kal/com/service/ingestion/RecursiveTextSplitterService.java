@@ -1,5 +1,6 @@
-package dim.kal.com.service;
+package dim.kal.com.service.ingestion;
 
+import dim.kal.com.service.ingestion.ITextSplitterService;
 import jakarta.enterprise.context.ApplicationScoped;
 
 import java.util.ArrayList;
@@ -7,7 +8,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 @ApplicationScoped
-public class RecursiveTextSplitterService implements ITextSplitterService{
+public class RecursiveTextSplitterService implements ITextSplitterService {
 
     private static final Pattern SPLIT_PATTERN = Pattern.compile(
             "(?<=[.!?]\\s)|(?<=\\n)|(?=\\n)|(?<=^\\s{2,})"

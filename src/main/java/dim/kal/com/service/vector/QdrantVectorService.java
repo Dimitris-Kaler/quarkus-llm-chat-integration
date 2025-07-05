@@ -1,13 +1,12 @@
-package dim.kal.com.service;
+package dim.kal.com.service.vector;
 
 import java.io.InputStream;
-import java.net.http.HttpClient;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 import dim.kal.com.exception.QdrantOperationException;
+import dim.kal.com.service.vector.IVectorService;
 import jakarta.json.JsonValue;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -28,7 +27,7 @@ import jakarta.ws.rs.core.Response;
  */
 
 @ApplicationScoped
-public class QdrantVectorService implements IVectorService{
+public class QdrantVectorService implements IVectorService {
 
     @Inject
     Client httpClient; //  REST client (Quarkus/JAX-RS)

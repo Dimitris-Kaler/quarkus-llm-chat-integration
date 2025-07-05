@@ -1,7 +1,8 @@
-package dim.kal.com.service;
+package dim.kal.com.service.ingestion.loader;
 
 import dim.kal.com.exception.DataLoadingException;
 import dim.kal.com.model.Document;
+import dim.kal.com.service.ingestion.DocumentType;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.ws.rs.core.Response;
 
@@ -13,7 +14,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @ApplicationScoped
-public class TextDocumentLoaderService implements IDocumentLoaderService {
+public class TextDocumentLoader implements IDocumentLoader {
 
     @Override
     public boolean supports(DocumentType type) {

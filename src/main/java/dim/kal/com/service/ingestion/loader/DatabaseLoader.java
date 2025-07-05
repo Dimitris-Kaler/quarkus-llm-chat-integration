@@ -1,7 +1,8 @@
-package dim.kal.com.service;
+package dim.kal.com.service.ingestion.loader;
 
 import dim.kal.com.exception.DataLoadingException;
 import dim.kal.com.model.Document;
+import dim.kal.com.service.ingestion.DocumentType;
 import io.agroal.api.AgroalDataSource;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.core.Response;
@@ -17,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public class DatabaseLoaderService implements IDocumentLoaderService{
+public class DatabaseLoader implements IDocumentLoader {
     @Inject
     AgroalDataSource dataSource; // Quarkus JDBC
 

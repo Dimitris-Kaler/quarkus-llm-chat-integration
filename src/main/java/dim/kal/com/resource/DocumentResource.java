@@ -1,6 +1,6 @@
 package dim.kal.com.resource;
 
-import dim.kal.com.service.DocumentType;
+import dim.kal.com.service.ingestion.DocumentType;
 import dim.kal.com.service.RagService;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.POST;
