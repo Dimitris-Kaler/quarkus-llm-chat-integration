@@ -1,34 +1,51 @@
 plugins {
     id 'java'
-    id 'io.quarkus'
+    id 'io.quarkus' version '3.24.1'
 }
 
 repositories {
     mavenCentral()
     mavenLocal()
+    maven { url "https://maven.quarkus.io/public" }
 }
 
 dependencies {
+    // Quarkus BOM
     implementation enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}")
-    implementation 'dev.langchain4j:langchain4j:0.27.1'
-    implementation 'dev.langchain4j:langchain4j-ollama:0.27.1'
-    implementation 'io.quarkus:quarkus-resteasy-jackson'
+
+    // Βασικές εξαρτήσεις
+    implementation 'io.quarkus:quarkus-rest'
+    implementation 'io.quarkus:quarkus-rest-jackson'
     implementation 'io.quarkus:quarkus-smallrye-openapi'
     implementation 'io.quarkus:quarkus-arc'
-    implementation 'io.quarkus:quarkus-resteasy'
-    testImplementation 'io.quarkus:quarkus-junit5'
-    testImplementation 'io.rest-assured:rest-assured'
-    implementation 'org.jboss.resteasy:resteasy-client'
-    // For PDF processing
+
+    // REST Client για HTTP calls
+    implementation 'io.quarkus:quarkus-rest-client'
+    implementation 'io.quarkus:quarkus-rest-client-jackson'
+
+    // Quarkus LangChain4J extension (this provides the CDI integration)
+    implementation 'io.quarkiverse.langchain4j:quarkus-langchain4j-ollama:0.19.0'
+
+    // Core LangChain4J (should be managed by the Quarkus extension)
+    implementation 'dev.langchain4j:langchain4j:0.27.1'
+    implementation 'dev.langchain4j:langchain4j-ollama:0.27.1'
+
+    // PDF processing
     implementation 'org.apache.pdfbox:pdfbox:3.0.0'
 
-    // For embeddings
-    implementation 'dev.langchain4j:langchain4j-embeddings:0.27.1'
+    // JDBC Driver (εξαρτάται από τη βάση σου)
+    implementation 'io.quarkus:quarkus-jdbc-postgresql' // Για PostgreSQL
+    // ή implementation 'io.quarkus:quarkus-jdbc-mysql'
+    // ή implementation 'io.quarkus:quarkus-jdbc-h2'
 
-//        // Προσθήκη REST Client
-//        implementation 'io.quarkus:quarkus-rest-client' // Βασικό για Quarkus REST Client
-//        implementation 'io.quarkus:quarkus-rest-client-jackson' // Για JSON handling
+    // Agroal (Connection Pool)
+    implementation 'io.quarkus:quarkus-agroal'
 
+    implementation 'com.opencsv:opencsv:5.9'
+
+    // Testing
+    testImplementation 'io.quarkus:quarkus-junit5'
+    testImplementation 'io.rest-assured:rest-assured'
 }
 
 group 'dim.kal.com'
@@ -42,6 +59,7 @@ java {
 test {
     systemProperty "java.util.logging.manager", "org.jboss.logmanager.LogManager"
 }
+
 compileJava {
     options.encoding = 'UTF-8'
     options.compilerArgs << '-parameters'

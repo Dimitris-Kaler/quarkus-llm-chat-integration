@@ -1,9 +1,13 @@
 package dim.kal.com.service;
 
 import dev.langchain4j.data.document.DocumentLoader;
+import dim.kal.com.exception.LlmRuntimeException;
 import dim.kal.com.model.Document;
+import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.inject.Instance;
 import jakarta.inject.Inject;
+import jakarta.ws.rs.core.Response;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import java.util.List;
@@ -21,8 +25,11 @@ import java.util.stream.Collectors;
  */
 @ApplicationScoped
 public class RagService {
+
     @Inject
-    IDocumentLoaderService documentLoader;
+    Instance<IDocumentLoaderService> loaders; // Αντικατάσταση του documentLoader
+//    @Inject
+//    IDocumentLoaderService documentLoader;
 
     @Inject
     ITextSplitterService textSplitter;
@@ -39,41 +46,105 @@ public class RagService {
     @ConfigProperty(name = "rag.chunk.overlap")
     int chunkOverlap;
 
+    @ConfigProperty(name = "rag.collection.name", defaultValue = "documents")
+    String collectionName;
+
+    @ConfigProperty(name = "rag.vector.dimension", defaultValue = "1536")
+    int vectorDimension;
+
+    @PostConstruct
+    public void init() {
+        // Δημιούργησε το collection κατά την εκκίνηση
+        ensureCollectionExists(collectionName);
+    }
+
+    /**
+     * Ελέγχει αν υπάρχει το collection και το δημιουργεί αν χρειάζεται
+     */
+    private void ensureCollectionExists(String collectionName) {
+        try {
+            if (!vectorService.collectionExists(collectionName)) {
+                System.out.println("Creating collection: " + collectionName);
+                vectorService.createCollection(collectionName, vectorDimension);
+                System.out.println("Collection created successfully: " + collectionName);
+            } else {
+                System.out.println("Collection already exists: " + collectionName);
+            }
+        } catch (Exception e) {
+            System.err.println("Failed to ensure collection exists: " + e.getMessage());
+            throw new RuntimeException("Failed to initialize vector collection", e);
+        }
+    }
+
 
     /**
      * Φόρτωση εγγράφου, chunking και αποθήκευση embeddings.
      */
-    public void ingestDocument(String source) {
-        List<Document> documents = documentLoader.load(source);
-        documents.forEach(doc -> {
-            List<String> chunks = textSplitter.split(doc.getContent(), chunkSize, chunkOverlap);
-            chunks.forEach(chunk -> {
-                float[] embedding = embeddingService.generateEmbedding(chunk);
-                vectorService.upsert("documents",
-                        new IVectorService.VectorEmbedding(
-                                embedding,
-                                UUID.randomUUID().toString(),
-                                Map.of(
-                                        "text", chunk,
-                                        "source", doc.getSource()
+    public void ingestDocument(String source, DocumentType type, Map<String, String> params) {
+        try {
+            // Βεβαιώσου ότι το collection υπάρχει πριν το ingest
+            ensureCollectionExists(collectionName);
+
+            IDocumentLoaderService documentLoader= loaders.stream()
+                    .filter(l -> l.supports(type))
+                    .findFirst()
+                            .orElseThrow(()->new LlmRuntimeException("No loader for type: " + type, Response.Status.INTERNAL_SERVER_ERROR));
+
+            List<Document> documents = documentLoader.load(source,params);
+            System.out.println("Loaded " + documents.size() + " documents from: " + source);
+
+            documents.forEach(doc -> {
+                List<String> chunks = textSplitter.split(doc.getContent(), chunkSize, chunkOverlap);
+                System.out.println("Split document into " + chunks.size() + " chunks");
+
+                chunks.forEach(chunk -> {
+                    try {
+                        float[] embedding = embeddingService.generateEmbedding(chunk);
+                        vectorService.upsert(collectionName,
+                                new IVectorService.VectorEmbedding(
+                                        embedding,
+                                        UUID.randomUUID().toString(),
+                                        Map.of(
+                                                "text", chunk,
+                                                "source", doc.getSource()
+                                        )
                                 )
-                        )
-                );
+                        );
+                    } catch (Exception e) {
+                        System.err.println("Failed to process chunk: " + e.getMessage());
+                        throw new RuntimeException("Failed to process chunk", e);
+                    }
+                });
             });
-        });
+
+            System.out.println("Successfully ingested document: " + source);
+
+        } catch (Exception e) {
+            System.err.println("Document ingestion failed: " + e.getMessage());
+            throw new RuntimeException("Failed to ingest document: " + source, e);
+        }
     }
 
     public List<String> retrieveRelevantChunks(String query, int topK) {
-        float[] queryEmbedding = embeddingService.generateEmbedding(query);
-        List<IVectorService.VectorMatch> results = vectorService.search(
-                "documents",
-                queryEmbedding,
-                topK,
-                null
-        );
+        try {
+            // Βεβαιώσου ότι το collection υπάρχει πριν το search
+            ensureCollectionExists(collectionName);
 
-        return results.stream()
-                .map(match -> match.metadata().get("text"))
-                .collect(Collectors.toList());
+            float[] queryEmbedding = embeddingService.generateEmbedding(query);
+            List<IVectorService.VectorMatch> results = vectorService.search(
+                    collectionName,
+                    queryEmbedding,
+                    topK,
+                    null
+            );
+
+            return results.stream()
+                    .map(match -> match.metadata().get("text"))
+                    .collect(Collectors.toList());
+
+        } catch (Exception e) {
+            System.err.println("Failed to retrieve relevant chunks: " + e.getMessage());
+            return List.of(); // Επιστρέφει κενή λίστα σε περίπτωση λάθους
+        }
     }
 }

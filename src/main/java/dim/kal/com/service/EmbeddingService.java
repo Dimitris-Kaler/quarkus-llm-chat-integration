@@ -14,6 +14,7 @@ import dev.langchain4j.model.embedding.EmbeddingModel;
 public class EmbeddingService {
     @Inject
     OllamaService ollamService;
+
     @Inject
     EmbeddingModel embeddingModel;  // Αυτόματη ενσωμάτωση από LangChain4J
 

@@ -41,9 +41,12 @@ This runs Ollama and exposes port 11434 on your machine, which your app will con
    
    docker exec ollama ollama pull mistral
    
+   docker exec -it ollama /bin/bash
+root@22ee36a8404f:/# ollama pull nomic-embed-text:latest
+   
    
 ```
-
+nomic-embed-text (Embedding Model)
 You need this so Ollama can serve that model for your requests.
 
 3. **Verify Ollama Model is loaded**
